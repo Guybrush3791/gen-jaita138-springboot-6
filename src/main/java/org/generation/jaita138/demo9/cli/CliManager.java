@@ -102,6 +102,7 @@ public class CliManager {
         int displacement = Integer.parseInt(strDisplacement);
         car.setDisplacement(displacement);
 
+        // BLOCCO RELAZIONE 1aN
         System.out.println("parks");
         List<Park> parks = parkService.findAll();
         System.out.println(parks);
