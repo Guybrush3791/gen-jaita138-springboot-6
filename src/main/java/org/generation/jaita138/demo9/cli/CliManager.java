@@ -118,7 +118,7 @@ public class CliManager {
 
     private void save(Car car) {
 
-        boolean isInsert = (car.getId() == null); // OK
+        boolean isInsert = (car.getId() == null);
 
         System.out.println("brand" + (isInsert
                 ? ""
@@ -154,18 +154,18 @@ public class CliManager {
         car.setDisplacement(displacement);
 
         // BLOCCO RELAZIONE 1aN
-        List<Park> parks = parkService.findAll(); // OK
+        List<Park> parks = parkService.findAll();
         if (parks.size() > 0) {
-            System.out.println("parks"); // OK
+            System.out.println("parks");
             parks.stream()
                     // {id}. {name} - {street} ({city})
                     .map(p -> p.getId() + ". " + p.getName() + " - " + p.getStreet() + " (" + p.getCity() + ")")
                     .forEach(System.out::println);
             printSeparetor(); // OK
             String parkIdStr = (car.getPark() == null) ? "in movimento" : "" + car.getPark().getId();
-            System.out.println("park id" + (isInsert // OK
+            System.out.println("park id" + (isInsert
                     ? "" // OK
-                    : " (" + parkIdStr + ")")); // OK
+                    : " (" + parkIdStr + ")"));
             String strParkId = scanner.nextLine();
             Long parkId = Long.parseLong(strParkId);
             Park park = parkService.findById(parkId);
