@@ -79,41 +79,7 @@ public class CliManager {
 
         Car car = new Car();
 
-        System.out.println("brand");
-        String brand = scanner.nextLine();
-        car.setBrand(brand);
-
-        System.out.println("model");
-        String model = scanner.nextLine();
-        car.setModel(model);
-
-        System.out.println("year");
-        String strYear = scanner.nextLine();
-        int year = Integer.parseInt(strYear);
-        car.setYear(year);
-
-        System.out.println("price");
-        String strPrice = scanner.nextLine();
-        int price = Integer.parseInt(strPrice);
-        car.setPrice(price);
-
-        System.out.println("displacement");
-        String strDisplacement = scanner.nextLine();
-        int displacement = Integer.parseInt(strDisplacement);
-        car.setDisplacement(displacement);
-
-        // BLOCCO RELAZIONE 1aN
-        System.out.println("parks");
-        List<Park> parks = parkService.findAll();
-        System.out.println(parks);
-        printSeparetor();
-        System.out.println("park id");
-        String strParkId = scanner.nextLine();
-        Long parkId = Long.parseLong(strParkId);
-        Park park = parkService.findById(parkId);
-        car.setPark(park);
-
-        carService.save(car);
+        save(car);
     }
 
     private void updateCar() {
@@ -128,30 +94,7 @@ public class CliManager {
             return;
         }
 
-        System.out.println("brand (" + car.getBrand() + ")");
-        String brand = scanner.nextLine();
-        car.setBrand(brand);
-
-        System.out.println("model (" + car.getModel() + ")");
-        String model = scanner.nextLine();
-        car.setModel(model);
-
-        System.out.println("year (" + car.getYear() + ")");
-        String strYear = scanner.nextLine();
-        int year = Integer.parseInt(strYear);
-        car.setYear(year);
-
-        System.out.println("price (" + car.getPrice() + ")");
-        String strPrice = scanner.nextLine();
-        int price = Integer.parseInt(strPrice);
-        car.setPrice(price);
-
-        System.out.println("displacement (" + car.getDisplacement() + ")");
-        String strDisplacement = scanner.nextLine();
-        int displacement = Integer.parseInt(strDisplacement);
-        car.setDisplacement(displacement);
-
-        carService.save(car);
+        save(car);
     }
 
     private void deleteCar() {
@@ -171,5 +114,65 @@ public class CliManager {
 
     private void printSeparetor() {
         System.out.println("------------------------------------------------");
+    }
+
+    private void save(Car car) {
+
+        boolean isInsert = (car.getId() == null); // OK
+
+        System.out.println("brand" + (isInsert
+                ? ""
+                : " (" + car.getBrand() + ")"));
+        String brand = scanner.nextLine();
+        car.setBrand(brand);
+
+        System.out.println("model" + (isInsert
+                ? ""
+                : " (" + car.getModel() + ")"));
+        String model = scanner.nextLine();
+        car.setModel(model);
+
+        System.out.println("year" + (isInsert
+                ? ""
+                : " (" + car.getYear() + ")"));
+        String strYear = scanner.nextLine();
+        int year = Integer.parseInt(strYear);
+        car.setYear(year);
+
+        System.out.println("price" + (isInsert
+                ? ""
+                : " (" + car.getPrice() + ")"));
+        String strPrice = scanner.nextLine();
+        int price = Integer.parseInt(strPrice);
+        car.setPrice(price);
+
+        System.out.println("displacement" + (isInsert
+                ? ""
+                : " (" + car.getDisplacement() + ")"));
+        String strDisplacement = scanner.nextLine();
+        int displacement = Integer.parseInt(strDisplacement);
+        car.setDisplacement(displacement);
+
+        // BLOCCO RELAZIONE 1aN
+        List<Park> parks = parkService.findAll(); // OK
+        if (parks.size() > 0) {
+            System.out.println("parks"); // OK
+            parks.stream()
+                    // {id}. {name} - {street} ({city})
+                    .map(p -> p.getId() + ". " + p.getName() + " - " + p.getStreet() + " (" + p.getCity() + ")")
+                    .forEach(System.out::println);
+            printSeparetor(); // OK
+            String parkIdStr = (car.getPark() == null) ? "in movimento" : "" + car.getPark().getId();
+            System.out.println("park id" + (isInsert // OK
+                    ? "" // OK
+                    : " (" + parkIdStr + ")")); // OK
+            String strParkId = scanner.nextLine();
+            Long parkId = Long.parseLong(strParkId);
+            Park park = parkService.findById(parkId);
+            car.setPark(park);
+        } else
+            System.out.println("Nessun parcheggio ancora disponibile. Riprovare in futuro!");
+
+        carService.save(car);
     }
 }
