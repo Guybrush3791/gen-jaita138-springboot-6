@@ -68,6 +68,14 @@ public class Park {
         this.capacity = capacity;
     }
 
+    public List<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(List<Car> cars) {
+        this.cars = cars;
+    }
+
     @Override
     public String toString() {
 
@@ -79,4 +87,5 @@ public class Park {
                 + "  capacity=" + capacity + "\n"
                 + "]";
     }
+
 }
