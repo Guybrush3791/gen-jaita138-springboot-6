@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.generation.jaita138.demo9.db.entity.Car;
+import org.generation.jaita138.demo9.db.entity.Owner;
 import org.generation.jaita138.demo9.db.entity.Park;
 import org.generation.jaita138.demo9.db.service.CarService;
+import org.generation.jaita138.demo9.db.service.OwnerService;
 import org.generation.jaita138.demo9.db.service.ParkService;
 
 public class CliManager {
@@ -14,10 +16,15 @@ public class CliManager {
 
     private CarService carService;
     private ParkService parkService;
+    private OwnerService ownerService;
 
-    public CliManager(CarService carService, ParkService parkService) {
+    public CliManager(
+            CarService carService,
+            ParkService parkService,
+            OwnerService ownerService) {
         this.carService = carService;
         this.parkService = parkService;
+        this.ownerService = ownerService;
 
         scanner = new Scanner(System.in);
 
@@ -156,23 +163,53 @@ public class CliManager {
         // BLOCCO RELAZIONE 1aN
         List<Park> parks = parkService.findAll();
         if (parks.size() > 0) {
+
             System.out.println("parks");
             parks.stream()
                     // {id}. {name} - {street} ({city})
-                    .map(p -> p.getId() + ". " + p.getName() + " - " + p.getStreet() + " (" + p.getCity() + ")")
+                    .map(p -> p.getId() + ". " + p.getName() + " - " + p.getStreet() + " (" +
+                            p.getCity() + ")")
                     .forEach(System.out::println);
-            printSeparetor(); // OK
-            String parkIdStr = (car.getPark() == null) ? "in movimento" : "" + car.getPark().getId();
+            printSeparetor();
+
+            String parkIdStr = (car.getPark() == null) ? "in movimento"
+                    : "" +
+                            car.getPark().getId();
             System.out.println("park id" + (isInsert
-                    ? "" // OK
+                    ? ""
                     : " (" + parkIdStr + ")"));
             String strParkId = scanner.nextLine();
             Long parkId = Long.parseLong(strParkId);
             Park park = parkService.findById(parkId);
+
             car.setPark(park);
         } else
             System.out.println("Nessun parcheggio ancora disponibile. Riprovare in futuro!");
 
-        carService.save(car);
+        // BLOCCO RELAZIONE NaM (ManyToMany)
+        String hasOwner = "y";
+        List<Owner> owners = ownerService.findAll();
+        while (hasOwner.equals("y")) {
+
+            System.out.println("has owner? (y/n)");
+            hasOwner = scanner.nextLine();
+
+            if (!hasOwner.equals("y")) {
+
+                carService.save(car);
+                return;
+            }
+
+            System.out.println("owners");
+            owners.stream()
+                    .map(o -> o.getId() + ". " + o.getName() + " " + o.getSurname())
+                    .forEach(System.out::println);
+            printSeparetor();
+            System.out.println("owner id");
+            String strOwnerId = scanner.nextLine();
+            Long ownerId = Long.parseLong(strOwnerId);
+            Owner owner = ownerService.findById(ownerId);
+            car.addOwner(owner);
+        }
     }
 }

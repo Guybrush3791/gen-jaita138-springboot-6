@@ -6,6 +6,7 @@ import org.checkerframework.checker.units.qual.kN;
 import org.generation.jaita138.demo9.cli.CliManager;
 import org.generation.jaita138.demo9.db.entity.Car;
 import org.generation.jaita138.demo9.db.service.CarService;
+import org.generation.jaita138.demo9.db.service.OwnerService;
 import org.generation.jaita138.demo9.db.service.ParkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -21,6 +22,9 @@ public class Demo9Application implements CommandLineRunner {
 	@Autowired
 	private ParkService parkService;
 
+	@Autowired
+	private OwnerService ownerService;
+
 	public static void main(String[] args) {
 		SpringApplication.run(Demo9Application.class, args);
 	}
@@ -30,7 +34,7 @@ public class Demo9Application implements CommandLineRunner {
 
 		// test();
 
-		new CliManager(carService, parkService);
+		new CliManager(carService, parkService, ownerService);
 	}
 
 	private void test() {

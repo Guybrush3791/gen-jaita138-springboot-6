@@ -1,10 +1,14 @@
 package org.generation.jaita138.demo9.db.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -26,6 +30,9 @@ public class Car {
 
     @ManyToOne
     private Park park;
+
+    @ManyToMany
+    private List<Owner> owners;
 
     public Long getId() {
         return id;
@@ -81,6 +88,24 @@ public class Car {
 
     public void setPark(Park park) {
         this.park = park;
+    }
+
+    public List<Owner> getOwners() {
+
+        return this.owners;
+    }
+
+    public void setOwners(List<Owner> owners) {
+
+        this.owners = owners;
+    }
+
+    public void addOwner(Owner owner) {
+
+        if (this.owners == null)
+            this.owners = new ArrayList<>();
+
+        this.owners.add(owner);
     }
 
     @Override
