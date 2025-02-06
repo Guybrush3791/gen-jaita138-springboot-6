@@ -74,7 +74,6 @@ public class Owner {
                 + "  name=" + name + ",\n"
                 + "  surname=" + surname + ",\n"
                 + "  email=" + email + ",\n"
-                + "  cars=" + cars + "\n"
                 + "]";
     }
 }

@@ -38,7 +38,8 @@ public class CliManager {
         System.out.println("2. Inserisci nuova auto");
         System.out.println("3. Modifica un auto esistente");
         System.out.println("4. Elimina un auto esistente");
-        System.out.println("5. Esci");
+        System.out.println("5. Stampa dettagli auto");
+        System.out.println("6. Esci");
         System.out.println("");
 
         String strUserValue = scanner.nextLine();
@@ -62,6 +63,10 @@ public class CliManager {
                 break;
 
             case 5:
+                printCarDetails();
+                break;
+
+            case 6:
                 return;
 
             default:
@@ -117,6 +122,25 @@ public class CliManager {
         }
 
         carService.delete(car);
+    }
+
+    private void printCarDetails() {
+
+        System.out.println("car id");
+        String strId = scanner.nextLine();
+        Long id = Long.parseLong(strId);
+        Car car = carService.findById(id);
+
+        if (car == null) {
+            System.out.println("auto non trovata");
+            return;
+        }
+
+        System.out.println("Car");
+        System.out.println(car);
+        System.out.println("Car Owners");
+        System.out.println(car.getOwners());
+        printSeparetor();
     }
 
     private void printSeparetor() {
@@ -187,6 +211,7 @@ public class CliManager {
             System.out.println("Nessun parcheggio ancora disponibile. Riprovare in futuro!");
 
         // BLOCCO RELAZIONE NaM (ManyToMany)
+        car.clearOwners();
         String hasOwner = "y";
         List<Owner> owners = ownerService.findAll();
         while (hasOwner.equals("y")) {
@@ -202,6 +227,7 @@ public class CliManager {
 
             System.out.println("owners");
             owners.stream()
+                    // .filter(p -> /* */)
                     .map(o -> o.getId() + ". " + o.getName() + " " + o.getSurname())
                     .forEach(System.out::println);
             printSeparetor();

@@ -108,6 +108,12 @@ public class Car {
         this.owners.add(owner);
     }
 
+    public void clearOwners() {
+
+        if (this.owners != null)
+            this.owners = null;
+    }
+
     @Override
     public String toString() {
 
